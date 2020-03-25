@@ -29,15 +29,42 @@ public class Path {
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
+     *
      * 
-     * @deprecated Need to be implemented.
      */
+
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+    	Arc currentArc = null;
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        double vitesseMin = 9999;
+        
+        if(nodes.size() == 0) {
+            return new Path(graph);
+        }
+        if(nodes.size() == 1) {
+            return new Path(graph, nodes.get(0) );
+        }
+        
+        for(int i=0; i<nodes.size()-1;i++) {
+            for(Arc a : nodes.get(i).getSuccessors()) {
+                if(a.getMinimumTravelTime() < vitesseMin
+                        && a.getDestination().equals(nodes.get(i+1))  ) {
+                    currentArc = a;    
+                    vitesseMin = a.getMinimumTravelTime();
+                }    
+            }
+            if(currentArc == null) {
+                throw new IllegalArgumentException();
+            }    
+            arcs.add(currentArc);
+            vitesseMin = 9999;
+            currentArc = null;
+        }
+        
         return new Path(graph, arcs);
     }
+    
 
     /**
      * Create a new path that goes through the given list of nodes (in order),
@@ -51,12 +78,38 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+        
+        Arc currentArc = null;
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        float distanceMin = 9999;
+        
+        if(nodes.size() == 0) {
+            return new Path(graph);
+        }
+        if(nodes.size() == 1) {
+            return new Path(graph, nodes.get(0) );
+        }
+        
+        for(int i=0; i<nodes.size()-1;i++) {
+            for(Arc a : nodes.get(i).getSuccessors()) {
+                if(a.getLength() < distanceMin 
+                        && a.getDestination().equals(nodes.get(i+1))  ) {
+                    currentArc = a;    
+                    distanceMin = a.getLength();
+                }    
+            }
+            if(currentArc == null) {
+                throw new IllegalArgumentException();
+            }    
+            arcs.add(currentArc);
+            distanceMin = 9999;
+            currentArc = null;
+        }
+        
         return new Path(graph, arcs);
     }
 
@@ -198,10 +251,24 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public boolean isValid() {
-        // TODO:
+        if(this.isEmpty()){
+            return true;
+        }
+        if(this.size()==1) {
+            return true;
+        }
+        if(this.getOrigin()==this.arcs.get(0).getOrigin())
+        {
+            for(int i=0;i<this.arcs.size();i++) {
+                if(this.arcs.get(i).getDestination()!=this.arcs.get(i+1).getOrigin()) {
+                    return false;
+                }
+                return true;
+            }
+        }
         return false;
     }
 
@@ -210,11 +277,14 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public float getLength() {
-        // TODO:
-        return 0;
+    	float res = 0.0f;
+    	for (Arc a :this.arcs) {
+    		res += a.getLength();
+    	}
+        return res;
     }
 
     /**
@@ -225,11 +295,10 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+        return (this.getLength()*3.6)/speed;
     }
 
     /**
@@ -238,11 +307,14 @@ public class Path {
      * 
      * @return Minimum travel time to travel this path (in seconds).
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+        double time=0;
+        for (Arc a :this.arcs) {
+        	time += a.getMinimumTravelTime();
+        }
+        return time;
     }
 
 }
