@@ -48,27 +48,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         		Node noeud_destination = arc.getDestination();
         		Label label_destination = labels[noeud_destination.getId()];
         		
-        		if (!label_destination.isMarque()) {
-        			double cout = label_courrant.getCost() + data.getCost(arc);
+        		double cout = data.getCost(arc) + label_courrant.getCost();
+        		
+        		if (!label_destination.isMarque()) // noeud jamais rencontré
+        		{
         			label_destination.setCost(cout);
         			label_destination.setPere(arc);
         			heap.insert(label_destination);
         		}
-        		else {
-        			
-        		}
-        			
-        	}
-        	
-       /* 	
-        	
-        	pour chaque successeur :
-        		if jamais rencontré (cout infini) : calcul cout, mis a jour label, ajout tas, parent = curent node
-        		if deja rencontré : comparer ancien cout et nouveau cout
-        			si moins bon : rien
-        			sinon : supp dans le tas puis modifier et remettre dans le tas */
+        		else if (label_destination.getCost()>cout) // noeud rencontré mais cout meilleur
+        		{
+        			heap.remove(label_destination);
+        			label_destination.setCost(cout);
+            		label_destination.setPere(arc);
+            		heap.insert(label_destination);
+        		}	
         		
-        }
+        			
+        	}// end for
+        			
+        }// end while
+        	
         
         
         return solution;
@@ -76,8 +76,3 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
 }
 
-//Noeud initial
-// fil dans binaryheap
-//cherche plus petit
-// le petit redevient le noeud initial
-// On l'enleve après
