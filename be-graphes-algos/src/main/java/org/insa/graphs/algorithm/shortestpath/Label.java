@@ -28,6 +28,10 @@ public class Label implements Comparable<Label>{
 		this.pere = p;
 	}
 	
+	public Arc getPere() {
+		return this.pere;
+	}
+	
 	public void marquer() {
 		this.marque = true;
 	}
@@ -46,7 +50,7 @@ public class Label implements Comparable<Label>{
 	}
 	
 	public int compareTo(Label other) {
-        return Float.compare(getCost(), other.getCost());
+        return Double.compare(getCost(), other.getCost());
     }
 	
 	public Node getNode() {

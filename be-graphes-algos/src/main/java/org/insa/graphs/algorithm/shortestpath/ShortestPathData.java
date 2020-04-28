@@ -31,6 +31,7 @@ public class ShortestPathData extends AbstractInputData {
     public Node getOrigin() {
         return origin;
     }
+    
 
     /**
      * @return Destination node for the path.
