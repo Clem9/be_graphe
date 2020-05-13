@@ -55,6 +55,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     /**
      * @return Index of the parent of the given index.
      */
+    
     protected int indexParent(int index) {
         return (index - 1) / 2;
     }
@@ -62,6 +63,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     /**
      * @return Index of the left child of the given index.
      */
+    
     protected int indexLeft(int index) {
         return index * 2 + 1;
     }
@@ -129,6 +131,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
     @Override
+    
     public void insert(E x) {
         int index = this.currentSize++;
         this.arraySet(index, x);
@@ -136,6 +139,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
     @Override
+    
     public void remove(E x) throws ElementNotFoundException {
     	int index;
     	if (isEmpty())
@@ -156,6 +160,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     
 
     @Override
+    
     public E findMin() throws EmptyPriorityQueueException {
         if (isEmpty())
             throw new EmptyPriorityQueueException();
@@ -163,6 +168,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
 
     @Override
+    
     public E deleteMin() throws EmptyPriorityQueueException {
         E minItem = findMin();
         E lastItem = this.array.get(--this.currentSize);
@@ -216,5 +222,20 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     public String toString() {
         return BinaryHeapFormatter.toStringTree(this, 8);
     }
-
+    
+    
+    public boolean isValid() {
+        for(int i=1; i<this.currentSize; i++) {
+            E current = this.array.get(i);
+            E parent = this.array.get(this.indexParent(i));
+            
+            if(current.compareTo(parent) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
 }

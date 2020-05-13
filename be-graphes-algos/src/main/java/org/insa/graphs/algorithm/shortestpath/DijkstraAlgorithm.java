@@ -42,7 +42,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         
         notifyOriginProcessed(origine);
         
-        while(!heap.isEmpty()) {
+        while(!heap.isEmpty() && labels[data.getDestination().getId()].isMarque() == false) {
         	Label label_courrant = heap.deleteMin();
         	label_courrant.marquer();
         	Node noeud_courant = label_courrant.getNode();
@@ -116,9 +116,23 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
             // Reverse the path...
             Collections.reverse(arcs);
-
-            // Create the final solution.
-            solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+           
+            Path path= new Path(graph, arcs);
+            
+            // On vérifie que ces valeurs soient bien égales
+            System.out.println("Longueur obtenue avec la méthode de la classe path : "+ path.getLength());
+            System.out.println("Longueur obtenur par le cout de la destination : " +labels[data.getDestination().getId()].getCost());
+            
+            // On vérifie que le chemin trouvé est bien valide
+            if(path.isValid()) {
+            	solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+            	System.out.println("Chemin valide");
+            }
+            else {
+            	solution = null;
+            	System.out.println("Chemin non valide");
+            }
+            
         }
         
         return solution;
