@@ -76,8 +76,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 			            //System.out.println("cout : " + label_destination.getCost());
 			        }	
 		        	else {
-		        		heap.remove(label_destination);
-			        	label_destination.setCost(cout);
+		        		heap.remove(label_destination); // noeud déjà rencontré, on le supprime 
+			        	label_destination.setCost(cout); //pour le réinsérer une fois le coût modifié
 			            label_destination.setPere(arc);
 			            heap.insert(label_destination);
 			            notifyNodeReached(noeud_destination);
